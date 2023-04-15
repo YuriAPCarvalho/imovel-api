@@ -16,6 +16,8 @@ const Imovel = require("./src/models/imovel");
 const Inquilino = require("./src/models/inquilino");
 const Proprietario = require("./src/models/proprietario");
 const Contrato = require("./src/models/contrato");
+const SolicitacaoAluguel = require("./src/models/solicitacaoAluguel");
+const GestaoContrato = require("./src/models/gestaoContrato")
 
 // Associações
 Proprietario.hasMany(Imovel, { foreignKey: "proprietarioId" });
@@ -26,6 +28,9 @@ Inquilino.hasMany(Contrato, { foreignKey: "inquilinoId" });
 
 Contrato.belongsTo(Imovel, { foreignKey: "imovelId" });
 Imovel.hasMany(Contrato, { foreignKey: "imovelId" });
+
+Imovel.hasMany(SolicitacaoAluguel, { foreignKey: "imovelId" });
+SolicitacaoAluguel.belongsTo(Imovel, { foreignKey: "imovelId" });
 
 sequelize
   .sync()
