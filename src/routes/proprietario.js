@@ -2,33 +2,33 @@ const express = require("express");
 const router = express.Router();
 const ProprietarioService = require("../services/proprietarioService");
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
   const proprietario = req.body;
-  const result = ProprietarioService.createProprietario(proprietario);
+  const result = await ProprietarioService.createProprietario(proprietario);
   res.json(result);
 });
 
-router.get("/", (req, res) => {
-  const result = ProprietarioService.findProprietarios();
+router.get("/", async (req, res) => {
+  const result = await ProprietarioService.findProprietarios();
   res.json(result);
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", async (req, res) => {
   const { id } = req.params;
-  const result = ProprietarioService.findProprietarioById(id);
+  const result = await ProprietarioService.findProprietarioById(id);
   res.json(result);
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const proprietario = req.body;
-  const result = ProprietarioService.updateProprietario(id, proprietario);
+  const result = await ProprietarioService.updateProprietario(id, proprietario);
   res.json(result);
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", async (req, res) => {
   const { id } = req.params;
-  const result = ProprietarioService.deleteProprietario(id);
+  const result = await ProprietarioService.deleteProprietario(id);
   res.json(result);
 });
 

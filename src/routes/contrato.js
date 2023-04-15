@@ -3,31 +3,31 @@ const router = express.Router();
 
 const contratoService = require("../services/contratoService");
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
   const contrato = req.body;
-  contratoService.createContrato(contrato);
+  await contratoService.createContrato(contrato);
   res.json(contrato);
 });
 
-router.get("/", (req, res) => {
-  const contratos = contratoService.findContratos();
+router.get("/", async (req, res) => {
+  const contratos = await contratoService.findContratos();
   res.json(contratos);
 });
 
-router.get("/:id", (req, res) => {
-  const contrato = contratoService.findContratoById(req.params.id);
+router.get("/:id", async (req, res) => {
+  const contrato = await contratoService.findContratoById(req.params.id);
   res.json(contrato);
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", async (req, res) => {
   const contrato = req.body;
   contrato.id = req.params.id;
-  contratoService.updateContrato(contrato);
+  await contratoService.updateContrato(contrato);
   res.json(contrato);
 });
 
-router.delete("/:id", (req, res) => {
-  contratoService.deleteContrato(req.params.id);
+router.delete("/:id", async (req, res) => {
+  await contratoService.deleteContrato(req.params.id);
   res.sendStatus(204);
 });
 
