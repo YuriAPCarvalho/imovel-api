@@ -1,21 +1,71 @@
 const express = require("express");
 const router = express.Router();
-const inquilinoService = require("../services/inquilinoService");
+const { Inquilino } = require("../models/inquilino");
 
-router.post("/", (req, res) => {
-  // Adicione a lógica para criar um inquilino
+router.post("/inquilino", async (req, res) => {
+  try {
+    const inquilino = await Inquilino.create(req.body);
+    res.status(201).json(inquilino);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Erro ao criar inquilino" });
+  }
 });
 
-router.get("/", (req, res) => {
-  // Adicione a lógica para buscar inquilinos
+router.get("/inquilino", async (req, res) => {
+  try {
+    const inquilinos = await Inquilino.findAll();
+    res.json(inquilinos);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Erro ao buscar inquilinos" });
+  }
 });
 
-router.put("/:id", (req, res) => {
-  // Adicione a lógica para atualizar um inquilino
+router.get("/inquilino/:id", async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const inquilino = await Inquilino.findByPk(id);
+    if (!inquilino) {
+      return res.status(404).send("Inquilino não encontrado");
+    }
+    return res.status(200).json(inquilino);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Erro ao buscar inquilino");
+  }
 });
 
-router.delete("/:id", (req, res) => {
-  // Adicione a lógica para deletar um inquilino
+router.put("/inquilino/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [rowsUpdated, [inquilino]] = await Inquilino.update(req.body, {
+      returning: true,
+      where: { id },
+    });
+    if (rowsUpdated === 0) {
+      return res.status(404).json({ message: "Inquilino não encontrado" });
+    }
+    res.json(inquilino);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Erro ao atualizar inquilino" });
+  }
+});
+
+router.delete("/inquilino/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const rowsDeleted = await Inquilino.destroy({ where: { id } });
+    if (rowsDeleted === 0) {
+      return res.status(404).json({ message: "Inquilino não encontrado" });
+    }
+    res.sendStatus(204);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Erro ao deletar inquilino" });
+  }
 });
 
 module.exports = router;
