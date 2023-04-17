@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../../database");
 
-const Imovel = sequelize.define(
-  "Imovel",
+const Pagamento = sequelize.define(
+  "Pagamento",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -10,31 +10,23 @@ const Imovel = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
-    endereco: {
-      type: DataTypes.STRING,
+    valor: {
+      type: DataTypes.FLOAT,
       allowNull: false,
     },
-    area: {
+    data: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    contratoId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    },
-    quartos: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    descricao: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
-    fotos: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: true,
     },
   },
   {
     timestamps: false,
-    tableName: "imovel",
+    tableName: "pagamento",
   }
 );
 
-module.exports = Imovel;
+module.exports = Pagamento;

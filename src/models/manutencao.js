@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../../database");
 
-const GestaoContrato = sequelize.define(
-  "GestaoContrato",
+const Manutencao = sequelize.define(
+  "Manutencao",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -14,6 +14,10 @@ const GestaoContrato = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: false,
     },
+    valor: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
     data: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -21,8 +25,7 @@ const GestaoContrato = sequelize.define(
   },
   {
     timestamps: false,
-    tableName: "gestao_contrato",
+    tableName: "manutencao",
   }
 );
-
-module.exports = GestaoContrato;
+module.exports = Manutencao;
