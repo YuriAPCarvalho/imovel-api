@@ -1,6 +1,9 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../../database");
 
+const Contrato = require("./contrato");
+const Imobiliaria = require("./imobiliaria");
+
 const Pagamento = sequelize.define(
   "Pagamento",
   {
@@ -22,11 +25,30 @@ const Pagamento = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    contratoId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "Contrato",
+        key: "id",
+      },
+    },
+    imobiliariaId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "Imobiliaria",
+        key: "id",
+      },
+    },
   },
-  {
-    timestamps: false,
-    tableName: "pagamento",
-  }
+  { freezeTableName: true }
 );
+
+Contrato.hasMany(Pagamento, { foreignKey: "contratoId" });
+Pagamento.belongsTo(Contrato, { foreignKey: "contratoId" });
+
+Imobiliaria.hasMany(Pagamento, { foreignKey: "imobiliariaId" });
+Pagamento.belongsTo(Imobiliaria, { foreignKey: "imobiliariaId" });
 
 module.exports = Pagamento;

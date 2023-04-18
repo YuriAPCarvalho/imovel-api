@@ -29,10 +29,7 @@ const Proprietario = sequelize.define(
       allowNull: false,
     },
   },
-  {
-    timestamps: false,
-    tableName: "proprietario",
-  }
+  { freezeTableName: true }
 );
 
 module.exports = Proprietario;

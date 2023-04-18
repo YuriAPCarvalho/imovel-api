@@ -28,10 +28,7 @@ const Imobiliaria = sequelize.define(
       allowNull: false,
     },
   },
-  {
-    timestamps: false,
-    tableName: "imobiliaria",
-  }
+  { freezeTableName: true }
 );
 
 module.exports = Imobiliaria;

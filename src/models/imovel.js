@@ -1,6 +1,9 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../../database");
 
+const Proprietario = require("./Proprietario");
+const Imobiliaria = require("./imobiliaria");
+
 const Imovel = sequelize.define(
   "Imovel",
   {
@@ -14,27 +17,34 @@ const Imovel = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    area: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    quartos: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
     descricao: {
       type: DataTypes.TEXT,
       allowNull: true,
     },
-    fotos: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: true,
+    proprietarioId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Proprietario,
+        key: "id",
+      },
+    },
+    imobiliariaId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Imobiliaria,
+        key: "id",
+      },
     },
   },
-  {
-    timestamps: false,
-    tableName: "imovel",
-  }
+  { freezeTableName: true }
 );
+
+Imovel.belongsTo(Proprietario, { foreignKey: "proprietarioId" });
+Proprietario.hasMany(Imovel, { foreignKey: "proprietarioId" });
+
+Imovel.belongsTo(Imobiliaria, { foreignKey: "imobiliariaId" });
+Imobiliaria.hasMany(Imovel, { foreignKey: "imobiliariaId" });
 
 module.exports = Imovel;

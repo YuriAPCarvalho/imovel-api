@@ -33,10 +33,7 @@ const Inquilino = sequelize.define(
       allowNull: false,
     },
   },
-  {
-    timestamps: false,
-    tableName: "inquilino",
-  }
+  { freezeTableName: true }
 );
 
 module.exports = Inquilino;
