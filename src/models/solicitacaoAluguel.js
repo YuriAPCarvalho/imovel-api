@@ -10,11 +10,11 @@ const SolicitacaoAluguel = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
-    idInquilino: {
+    inquilinoId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    idImovel: {
+    imovelId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
