@@ -1,63 +1,67 @@
 const express = require("express");
 const router = express.Router();
+const UsuarioService = require("../services/UsuarioService");
 
-const usuarioService = require("./../services/UsuarioService");
-const { AuthMiddleware } = require("../middlewares/authenticateToken");
-
-router.get("", AuthMiddleware.apply(["administrador"]), async (req, res) => {
+router.post("/", async (req, res) => {
+  const usuario = req.body;
   try {
-    let resposta = await usuarioService.buscarTodos();
-    res.json(resposta);
+    const result = await UsuarioService.createUsuario(usuario);
+    res.json(result);
   } catch (error) {
-    console.log(`[ERRO - GET /usuarios] : ${error.message}`);
-    res.status(error.status).json({
-      message: "Erro ao buscar usuario.",
-    });
+    res.status(500).json({ message: "Erro ao criar usuário.", error });
   }
 });
 
-router.post("", AuthMiddleware.apply(["administrador"]), async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    let resposta = await usuarioService.adicionar(req.body);
-    res.json(resposta);
+    const result = await UsuarioService.findUsuarios();
+    res.json(result);
   } catch (error) {
-    console.log(`[ERRO - POST /usuarios] : ${error.message}`);
-    res.status(error.status).json({
-      message: "Erro ao adicionar novo usuario.",
-    });
+    res.status(500).json({ message: "Erro ao buscar usuários.", error });
   }
 });
 
-router.put(
-  "/:id",
-  AuthMiddleware.apply(["administrador"]),
-  async (req, res) => {
-    try {
-      let resposta = await usuarioService.editar(req.params.id, req.body);
-      res.json(resposta);
-    } catch (error) {
-      console.log(`[ERRO - PUT /usuarios] : ${error.message}`);
-      res.status(error.status).json({
-        message: "Erro ao editar usuario.",
-      });
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await UsuarioService.findUsuarioById(id);
+    if (!result) {
+      res.status(404).json({ message: `Usuário com id ${id} não encontrado.` });
+    } else {
+      res.json(result);
     }
+  } catch (error) {
+    res.status(500).json({ message: "Erro ao buscar usuário.", error });
   }
-);
+});
 
-router.put(
-  "/inativar/:id",
-  AuthMiddleware.apply(["administrador"]),
-  async (req, res) => {
-    try {
-      let resposta = await usuarioService.inativar(req.params.id);
-      res.json(resposta);
-    } catch (error) {
-      console.log(`[ERRO - PUT /usuarios/inativar] : ${error.message}`);
-      res.status(error.status).json({
-        message: "Erro ao inativar usuario.",
-      });
+router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  const usuario = req.body;
+  try {
+    const result = await UsuarioService.updateUsuario(id, usuario);
+    if (!result) {
+      res.status(404).json({ message: `Usuário com id ${id} não encontrado.` });
+    } else {
+      res.json(result);
     }
+  } catch (error) {
+    res.status(500).json({ message: "Erro ao atualizar usuário.", error });
   }
-);
+});
+
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await UsuarioService.deleteUsuario(id);
+    if (!result) {
+      res.status(404).json({ message: `Usuário com id ${id} não encontrado.` });
+    } else {
+      res.json({ message: `Usuário com id ${id} foi excluído.` });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Erro ao excluir usuário.", error });
+  }
+});
 
 module.exports = router;

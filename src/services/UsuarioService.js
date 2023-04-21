@@ -1,48 +1,83 @@
-const usuarioModel = require("../models/Usuario");
+const Usuario = require("../models/Usuario");
+const bcrypt = require("bcrypt");
 
-module.exports = {
-  buscarTodos: async () => {
+class UsuarioService {
+  async createUsuario(usuario) {
     try {
-      return await usuarioModel.find({});
+      const newUsuario = await Usuario.create(usuario);
+      return newUsuario;
     } catch (error) {
-      throw { message: error.message, status: 500 };
+      throw new Error(error.message);
     }
-  },
+  }
 
-  adicionar: async (usuario) => {
+  async findUsuarios() {
     try {
-      if (usuario) return await usuarioModel.create(usuario);
-      throw { message: "Informações incompletas.", status: 400 };
+      const usuarios = await Usuario.findAll();
+      return usuarios;
     } catch (error) {
-      throw { message: error.message, status: 500 };
+      throw new Error(error.message);
     }
-  },
+  }
 
-  editar: async (id, usuario) => {
+  async findUsuarioById(id) {
     try {
-      if (id && usuario)
-        return await usuarioModel.findOneAndUpdate({ _id: id }, usuario);
-      throw { message: "Informações incompletas.", status: 400 };
+      const usuario = await Usuario.findByPk(id);
+      return usuario;
     } catch (error) {
-      throw { message: error.message, status: 500 };
+      throw new Error(error.message);
     }
-  },
+  }
 
-  inativar: async (id) => {
+  async updateUsuario(id, usuario) {
     try {
-      if (id) {
-        let usuarioEncontrado = await usuarioModel.findOne({ _id: id });
-        if (usuarioEncontrado) {
-          usuarioEncontrado.ativo = false;
-          return await usuarioModel.findOneAndUpdate(
-            { _id: id },
-            usuarioEncontrado
-          );
-        }
-        throw { message: "Usuário não encontrado.", status: 400 };
+      const [updatedRowsCount, updatedRows] = await Usuario.update(usuario, {
+        where: {
+          id: id,
+        },
+        returning: true,
+      });
+      if (updatedRowsCount === 0) {
+        throw new Error("Usuário não encontrado");
+      }
+      return updatedRows[0];
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  async deleteUsuario(id) {
+    try {
+      const deletedRowCount = await Usuario.destroy({
+        where: {
+          id: id,
+        },
+      });
+      if (deletedRowCount === 0) {
+        throw new Error("Usuário não encontrado");
       }
     } catch (error) {
-      throw { message: error.message, status: 500 };
+      throw new Error(error.message);
     }
-  },
-};
+  }
+
+  async autenticarUsuario(email, senha) {
+    try {
+      const usuario = await Usuario.findOne({ where: { email: email } });
+      if (!usuario) {
+        return null;
+      }
+      const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
+      if (senhaCorreta) {
+        return usuario;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.log(error.message);
+      throw new Error(error.message);
+    }
+  }
+}
+
+module.exports = new UsuarioService();

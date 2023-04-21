@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../../database");
+const bcrypt = require("bcrypt");
 
 const Usuario = sequelize.define(
   "Usuario",
@@ -22,6 +23,10 @@ const Usuario = sequelize.define(
     senha: {
       type: DataTypes.STRING,
       allowNull: false,
+      set(value) {
+        const hash = bcrypt.hashSync(value, 10);
+        this.setDataValue("senha", hash);
+      },
     },
     perfil: {
       type: DataTypes.ENUM("cliente", "operador", "administrador"),
