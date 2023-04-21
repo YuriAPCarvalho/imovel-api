@@ -21,15 +21,15 @@ const Inquilino = sequelize.define(
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       unique: true,
+    },
+    senha: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     telefone: {
       type: DataTypes.STRING,
-      allowNull: false,
-    },
-    dadosFinanceiros: {
-      type: DataTypes.JSON,
       allowNull: false,
     },
   },

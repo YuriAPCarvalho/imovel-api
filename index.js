@@ -2,6 +2,10 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const port = 3000;
+const cors = require("cors");
+
+// Liberacao do CORS
+app.use(cors());
 
 // Importa e executa o arquivo database.js
 require("./database");
