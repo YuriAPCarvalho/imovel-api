@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../../database");
 
-const Inquilino = sequelize.define(
-  "Inquilino",
+const Usuario = sequelize.define(
+  "Usuario",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -14,22 +14,22 @@ const Inquilino = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    cpf: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
     email: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
       unique: true,
     },
-    telefone: {
+    senha: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    perfil: {
+      type: DataTypes.ENUM("cliente", "operador", "administrador"),
+      allowNull: false,
+      defaultValue: "cliente",
     },
   },
   { freezeTableName: true }
 );
 
-module.exports = Inquilino;
+module.exports = Usuario;

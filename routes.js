@@ -10,6 +10,8 @@ const pagamentoRoutes = require("./src/routes/pagamentoRoutes");
 const manutencaoRoutes = require("./src/routes/manutencaoRoutes");
 const visitaRoutes = require("./src/routes/visitaRoutes");
 const imobiliariaRoutes = require("./src/routes/imobiliariaRoutes");
+const usuarioRoutes = require("./src/routes/usuarioRoutes");
+const authRoutes = require("./src/routes/AuthRoute");
 
 router.use("/contrato", contratoRoutes);
 router.use("/imovel", imovelRoutes);
@@ -20,5 +22,7 @@ router.use("/pagamento", pagamentoRoutes);
 router.use("/manutencao", manutencaoRoutes);
 router.use("/visita", visitaRoutes);
 router.use("/imobiliaria", imobiliariaRoutes);
+router.use("/usuario", usuarioRoutes);
+router.use("/auth", authRoutes);
 
 module.exports = router;
