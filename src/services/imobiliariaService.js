@@ -1,14 +1,24 @@
 const Imobiliaria = require("../models/imobiliaria");
+const { Op } = require("sequelize");
 
 class ImobiliariaService {
   constructor() {}
 
   async createImobiliaria(imobiliaria) {
     try {
+      const existingImobiliaria = await Imobiliaria.findOne({
+        where: {
+          [Op.or]: [{ cnpj: imobiliaria.cnpj }]
+        },
+      });
+      if (existingImobiliaria) {
+        throw new Error("Imobiliária já cadastrada");
+      }
+
       const novaImobiliaria = await Imobiliaria.create(imobiliaria);
       return novaImobiliaria;
     } catch (error) {
-      throw new Error("Não foi possível criar a imobiliária");
+      throw new Error(`Não foi possível criar a imobiliária ${error.message}`);
     }
   }
 

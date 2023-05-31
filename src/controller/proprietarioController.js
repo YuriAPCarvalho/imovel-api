@@ -5,12 +5,23 @@ const { Proprietario } = require("../models/proprietario");
 router.post("/proprietario", async (req, res) => {
   try {
     const { nome, cpf, email, telefone } = req.body;
+
+    const existingProprietario = await Proprietario.findOne({
+      $or: [{ cpf }, { email }],
+    });
+
+    if (existingProprietario) {
+      // Retorna uma resposta com status 409 (conflito) indicando a duplicidade
+      return res.status(409).json({ message: "cpf ou e-mail já cadastrados" });
+    }
+
     const proprietario = await Proprietario.create({
       nome,
       cpf,
       email,
       telefone,
     });
+
     res.status(201).json(proprietario);
   } catch (error) {
     console.log(error);

@@ -1,14 +1,25 @@
 const Proprietario = require("../models/proprietario");
+const { Op } = require("sequelize");
 
 class ProprietarioService {
   constructor() {}
 
   async createProprietario(proprietario) {
     try {
+      const existingProprietario = await Proprietario.findOne({
+        where: {
+          [Op.or]: [{ cpf: proprietario.cpf }, { email: proprietario.email }],
+        },
+      });
+
+      if (existingProprietario) {
+        throw new Error("CPF ou e-mail já cadastrados");
+      }
+
       const novoProprietario = await Proprietario.create(proprietario);
       return novoProprietario;
     } catch (error) {
-      throw new Error("Não foi possível criar o proprietário");
+      throw new Error(`Erro ao criar o proprietário: ${error.message}`);
     }
   }
 
@@ -17,7 +28,7 @@ class ProprietarioService {
       const proprietarios = await Proprietario.findAll();
       return proprietarios;
     } catch (error) {
-      throw new Error("Não foi possível buscar os proprietários");
+      throw new Error("Erro ao buscar os proprietários: " + error.message);
     }
   }
 
@@ -27,7 +38,7 @@ class ProprietarioService {
       if (!proprietario) throw new Error("Proprietário não encontrado");
       return proprietario;
     } catch (error) {
-      throw new Error("Não foi possível buscar o proprietário");
+      throw new Error("Erro ao buscar o proprietário: " + error.message);
     }
   }
 
@@ -38,7 +49,7 @@ class ProprietarioService {
       await proprietario.update(novoProprietario);
       return proprietario;
     } catch (error) {
-      throw new Error("Não foi possível atualizar o proprietário");
+      throw new Error("Erro ao atualizar o proprietário: " + error.message);
     }
   }
 
@@ -49,7 +60,7 @@ class ProprietarioService {
       await proprietario.destroy();
       return proprietario;
     } catch (error) {
-      throw new Error("Não foi possível deletar o proprietário");
+      throw new Error("Erro ao deletar o proprietário: " + error.message);
     }
   }
 }
