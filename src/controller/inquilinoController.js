@@ -4,11 +4,28 @@ const { Inquilino } = require("../models/inquilino");
 
 router.post("/inquilino", async (req, res) => {
   try {
-    const inquilino = await Inquilino.create(req.body);
+    const { nome, cpf, email, telefone } = req.body;
+
+    const existingInquilino = await Inquilino.findOne({
+      $or: [{ cpf }, { email }],
+    });
+
+    if (existingInquilino) {
+      // Retorna uma resposta com status 409 (conflito) indicando a duplicidade
+      return res.status(409).json({ message: "cpf ou e-mail já cadastrados" });
+    }
+
+    const inquilino = await Inquilino.create({
+      nome,
+      cpf,
+      email,
+      telefone,
+    });
+
     res.status(201).json(inquilino);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Erro ao criar inquilino" });
+    res.status(500).json({ message: "Erro ao criar proprietário" });
   }
 });
 
