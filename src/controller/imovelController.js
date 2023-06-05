@@ -4,13 +4,13 @@ const { Imovel } = require("../models/imovel");
 
 router.post("/imovel", async (req, res) => {
   try {
-    const { endereco, area, quartos, descricao, fotos } = req.body;
+    const { endereco, descricao, proprietario, imobiliaria } = req.body;
+
     const imovel = await Imovel.create({
       endereco,
-      area,
-      quartos,
       descricao,
-      fotos,
+      proprietario,
+      imobiliaria,
     });
     res.status(201).json(imovel);
   } catch (err) {
@@ -43,38 +43,33 @@ router.get("/imovel/:id", async (req, res) => {
 });
 
 router.put("/imovel/:id", async (req, res) => {
+  const { id } = req.params;
   try {
-    const { endereco, area, quartos, descricao, fotos } = req.body;
-    const imovel = await Imovel.findByPk(req.params.id);
-    if (!imovel) {
-      res.status(404).json({ message: "Imóvel não encontrado" });
-      return;
+    const [rowsUpdated, [imovel]] = await Imovel.update(req.body, {
+      returning: true,
+      where: { id },
+    });
+    if (rowsUpdated === 0) {
+      return res.status(404).json({ message: "imovel não encontrado" });
     }
-    imovel.endereco = endereco;
-    imovel.area = area;
-    imovel.quartos = quartos;
-    imovel.descricao = descricao;
-    imovel.fotos = fotos;
-    await imovel.save();
     res.json(imovel);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Erro ao atualizar imóvel" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Erro ao atualizar imovel" });
   }
 });
 
 router.delete("/imovel/:id", async (req, res) => {
+  const { id } = req.params;
   try {
-    const imovel = await Imovel.findByPk(req.params.id);
-    if (!imovel) {
-      res.status(404).json({ message: "Imóvel não encontrado" });
-      return;
+    const rowsDeleted = await Imovel.destroy({ where: { id } });
+    if (rowsDeleted === 0) {
+      return res.status(404).json({ message: "Imovel não encontrado" });
     }
-    await imovel.destroy();
-    res.json({ message: "Imóvel deletado com sucesso" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Erro ao deletar imóvel" });
+    res.sendStatus(204);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Erro ao deletar Imovel" });
   }
 });
 

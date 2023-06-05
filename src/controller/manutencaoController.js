@@ -1,35 +1,83 @@
 const express = require("express");
 const router = express.Router();
-const ManutencaoService = require("../models/manutencao");
+const { Manutencao } = require("../models/manutencao");
 
-router.post("/", async (req, res) => {
-  const manutencao = req.body;
-  const result = await ManutencaoService.createManutencao(manutencao);
-  res.json(result);
+router.post("/manutencao", async (req, res) => {
+  try {
+    const { descricao, valor, imovel, imobiliaria } = req.body;
+
+    const manutencao = await Manutencao.create({
+      descricao,
+      valor,
+      imovel,
+      imobiliaria,
+    });
+
+    res.status(201).json(manutencao);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Erro ao criar manutenção" });
+  }
 });
 
-router.get("/", async (req, res) => {
-  const result = await ManutencaoService.findManutencoes();
-  res.json(result);
+router.get("/manutencao", async (req, res) => {
+  try {
+    const manutencoes = await Manutencao.findAll();
+    res.json(manutencoes);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Erro ao buscar manutenções" });
+  }
 });
 
-router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  const result = await ManutencaoService.findManutencaoById(id);
-  res.json(result);
+router.get("/manutencao/:id", async (req, res) => {
+  try {
+    const manutencao = await Manutencao.findByPk(req.params.id);
+    if (manutencao) {
+      res.json(manutencao);
+    } else {
+      res.status(404).json({ message: "Manutenção não encontrada" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Erro ao buscar manutenção" });
+  }
 });
 
-router.put("/:id", async (req, res) => {
-  const { id } = req.params;
-  const manutencao = req.body;
-  const result = await ManutencaoService.updateManutencao(id, manutencao);
-  res.json(result);
+router.put("/manutencao/:id", async (req, res) => {
+  try {
+    const { descricao, valor, imovel, imobiliaria } = req.body;
+    const [linhasAtualizadas] = await Manutencao.update(
+      { descricao, valor, imovel, imobiliaria },
+      { where: { id: req.params.id } }
+    );
+    if (linhasAtualizadas > 0) {
+      res.json({ message: "Manutenção atualizada com sucesso" });
+    } else {
+      res.status(404).json({ message: "Manutenção não encontrada" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Erro ao atualizar manutenção" });
+  }
 });
 
-router.delete("/:id", async (req, res) => {
-  const { id } = req.params;
-  const result = await ManutencaoService.deleteManutencao(id);
-  res.json(result);
+router.delete("/manutencao/:id", async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const manutencao = await Manutencao.findByPk(id);
+
+    if (!manutencao) {
+      return res.status(404).json({ error: "Manutenção não encontrada" });
+    }
+
+    await manutencao.destroy();
+    res.status(204).send();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erro ao deletar a manutenção" });
+  }
 });
 
 module.exports = router;
