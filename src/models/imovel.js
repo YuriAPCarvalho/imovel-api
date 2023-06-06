@@ -21,6 +21,10 @@ const Imovel = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    imagem: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     proprietarioId: {
       type: DataTypes.INTEGER,
       allowNull: false,

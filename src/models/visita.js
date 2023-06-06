@@ -18,14 +18,6 @@ const Visita = sequelize.define(
       type: DataTypes.DATE,
       allowNull: false,
     },
-    inquilinoId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    imovelId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
     observacao: {
       type: DataTypes.TEXT,
       allowNull: true,
