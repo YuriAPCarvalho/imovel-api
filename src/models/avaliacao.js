@@ -32,7 +32,7 @@ const Avaliacao = sequelize.define(
   { freezeTableName: true }
 );
 
-Imovel.belongsTo(Avaliacao, { foreignKey: "ImovelId" });
-Avaliacao.hasMany(Imovel, { foreignKey: "ImovelId" });
+Avaliacao.belongsTo(Imovel, { foreignKey: "imovelId" });
+Imovel.hasMany(Avaliacao, { foreignKey: "imovelId" });
 
 module.exports = Avaliacao;

@@ -29,12 +29,12 @@ class ImovelService {
     }
   }
 
-  async updateImovel(id, imovel) {
+  async updateImovel(id, novoImovel) {
     try {
       const imovelExists = await this.findImovelById(id);
       if (!imovelExists) throw new Error("Imóvel não encontrado");
-      const updatedImovel = await imovelExists.update(imovel);
-      return updatedImovel;
+      await imovelExists.update(novoImovel);
+      return imovelExists;
     } catch (error) {
       throw new Error(`Erro ao atualizar imóvel: ${error.message}`);
     }

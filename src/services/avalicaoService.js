@@ -8,7 +8,7 @@ class AvaliacaoService {
       const novaAvaliacao = await Avaliacao.create(avaliacao);
       return novaAvaliacao;
     } catch (error) {
-      throw new Error("Não foi possível criar a avaliacao");
+      throw new Error("Não foi possível criar a avaliacao" + error.message);
     }
   }
 
@@ -17,7 +17,7 @@ class AvaliacaoService {
       const avaliacoes = await Avaliacao.findAll();
       return avaliacoes;
     } catch (error) {
-      throw new Error("Não foi possível buscar as avaliacoes");
+      throw new Error("Não foi possível buscar as avaliacoes" + error.message);
     }
   }
 
