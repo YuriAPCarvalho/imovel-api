@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const UsuarioService = require("../services/UsuarioService");
+const { Usuario } = require("../models/usuario");
 
-router.post("/", async (req, res) => {
+router.post("/usuario", async (req, res) => {
   const usuario = req.body;
   try {
     const result = await UsuarioService.createUsuario(usuario);
@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/usuario", async (req, res) => {
   try {
     const result = await UsuarioService.findUsuarios();
     res.json(result);
@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/usuario/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const result = await UsuarioService.findUsuarioById(id);
@@ -35,7 +35,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/usuario/:id", async (req, res) => {
   const { id } = req.params;
   const usuario = req.body;
   try {
@@ -50,17 +50,20 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
-  const { id } = req.params;
+router.delete("/usuario/:id", async (req, res) => {
   try {
-    const result = await UsuarioService.deleteUsuario(id);
-    if (!result) {
-      res.status(404).json({ message: `Usuário com id ${id} não encontrado.` });
-    } else {
-      res.json({ message: `Usuário com id ${id} foi excluído.` });
+    const { id } = req.params;
+    const usuario = await Usuario.findByPk(id);
+
+    if (!usuario) {
+      return res.status(404).json({ error: "Usuário não encontrado" });
     }
+
+    await usuario.destroy();
+    res.status(204).send();
   } catch (error) {
-    res.status(500).json({ message: "Erro ao excluir usuário.", error });
+    console.error(error);
+    res.status(500).json({ error: "Erro ao deletar o usuário" });
   }
 });
 

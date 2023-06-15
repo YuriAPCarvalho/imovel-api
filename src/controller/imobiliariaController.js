@@ -77,7 +77,6 @@ router.delete("/imobiliaria/:id", async (req, res) => {
     const imobiliaria = await Imobiliaria.findByPk(id);
 
     if (!imobiliaria) {
-      
       return res.status(404).json({ error: "Imobiliária não encontrada" });
     }
     await imobiliaria.destroy();

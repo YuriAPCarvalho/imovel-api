@@ -51,16 +51,17 @@ router.put("/:id", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-  const { id } = req.params;
   try {
+    const { id } = req.params;
     const result = await UsuarioService.deleteUsuario(id);
-    if (!result) {
-      res.status(404).json({ message: `Usuário com id ${id} não encontrado.` });
+    if (result) {
+      res.json(result);
     } else {
-      res.json({ message: `Usuário com id ${id} foi excluído.` });
+      res.status(404).json({ message: "Usuário não encontrado" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Erro ao excluir usuário.", error });
+    console.log(error);
+    res.status(500).json({ message: "Erro ao excluir usuário" });
   }
 });
 

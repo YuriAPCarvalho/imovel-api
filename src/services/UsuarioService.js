@@ -2,6 +2,7 @@ const Usuario = require("../models/usuario");
 const bcrypt = require("bcrypt");
 
 class UsuarioService {
+  constructor() {}
   async createUsuario(usuario) {
     try {
       const newUsuario = await Usuario.create(usuario);
@@ -48,14 +49,18 @@ class UsuarioService {
 
   async deleteUsuario(id) {
     try {
-      const deletedRowCount = await Usuario.destroy({
+      const usuario = await Usuario.findByPk(id);
+      if (!usuario) {
+        throw new Error("Usuário não encontrado");
+      }
+
+      await Usuario.destroy({
         where: {
           id: id,
         },
       });
-      if (deletedRowCount === 0) {
-        throw new Error("Usuário não encontrado");
-      }
+
+      return usuario;
     } catch (error) {
       throw new Error(error.message);
     }
