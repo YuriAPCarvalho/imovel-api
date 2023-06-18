@@ -11,6 +11,7 @@ const imobiliariaRoutes = require("./src/routes/imobiliariaRoutes");
 const usuarioRoutes = require("./src/routes/usuarioRoutes");
 const loginRoutes = require("./src/routes/loginRoutes");
 const avaliacaoRoutes = require("./src/routes/avaliacaoRoutes");
+const permissaoRoutes = require("./src/routes/permissaoRoutes");
 
 router.use("/contrato", contratoRoutes);
 router.use("/imovel", imovelRoutes);
@@ -22,5 +23,6 @@ router.use("/imobiliaria", imobiliariaRoutes);
 router.use("/usuario", usuarioRoutes);
 router.use("/login", loginRoutes);
 router.use("/avaliacao", avaliacaoRoutes);
+router.use("/permissao", permissaoRoutes);
 
 module.exports = router;

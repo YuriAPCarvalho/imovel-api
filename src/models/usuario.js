@@ -29,9 +29,9 @@ const Usuario = sequelize.define(
       },
     },
     perfil: {
-      type: DataTypes.ENUM("cliente", "operador", "administrador"),
+      type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: "cliente",
+      defaultValue: "CLIENTE",
     },
   },
   { freezeTableName: true }
