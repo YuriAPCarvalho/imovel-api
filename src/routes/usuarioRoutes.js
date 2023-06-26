@@ -60,6 +60,10 @@ router.delete("/:id", async (req, res) => {
       res.status(404).json({ message: "Usuário não encontrado" });
     }
   } catch (error) {
+    const { id } = req.params;
+    if (id == 1) {
+      res.status(401).json({ message: "Esse usuário não pode ser deletado." });
+    }
     console.log(error);
     res.status(500).json({ message: "Erro ao excluir usuário" });
   }

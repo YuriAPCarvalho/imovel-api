@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../../database");
+const Usuario = require("./usuario");
 
 const Permissao = sequelize.define(
   "Permissao",
@@ -56,5 +57,8 @@ const Permissao = sequelize.define(
   },
   { freezeTableName: true }
 );
+
+Usuario.hasMany(Permissao, { foreignKey: "perfil" });
+Permissao.belongsTo(Usuario, { foreignKey: "perfil" });
 
 module.exports = Permissao;

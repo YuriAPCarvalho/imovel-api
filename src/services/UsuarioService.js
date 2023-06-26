@@ -49,6 +49,9 @@ class UsuarioService {
 
   async deleteUsuario(id) {
     try {
+      if (id == 1) {
+        throw new Error("Não é possível excluir esse usuário.");
+      }
       const usuario = await Usuario.findByPk(id);
       if (!usuario) {
         throw new Error("Usuário não encontrado");
