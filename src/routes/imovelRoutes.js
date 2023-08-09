@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const ImovelService = require("../services/imovelService");
 
+
 router.post("/", async (req, res) => {
   try {
     const imovel = req.body;

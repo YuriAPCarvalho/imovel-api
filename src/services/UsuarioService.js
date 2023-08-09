@@ -1,5 +1,9 @@
 const Usuario = require("../models/usuario");
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
+const SECRET = process.env.JWT_SECRET;
+
+
 
 class UsuarioService {
   constructor() {}
@@ -77,7 +81,8 @@ class UsuarioService {
       }
       const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
       if (senhaCorreta) {
-        return usuario;
+        const token = jwt.sign({ id: usuario.id, perfil: usuario.perfil }, SECRET, { expiresIn: "1h" });
+        return { ...usuario.toJSON(), token };
       } else {
         return null;
       }

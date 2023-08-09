@@ -12,6 +12,7 @@ const usuarioRoutes = require("./src/routes/usuarioRoutes");
 const loginRoutes = require("./src/routes/loginRoutes");
 const avaliacaoRoutes = require("./src/routes/avaliacaoRoutes");
 const permissaoRoutes = require("./src/routes/permissaoRoutes");
+const { isOperator } = require("./src/middlewares/authenticateToken");
 
 router.use("/contrato", contratoRoutes);
 router.use("/imovel", imovelRoutes);
@@ -20,9 +21,9 @@ router.use("/proprietario", proprietarioRoutes);
 router.use("/manutencao", manutencaoRoutes);
 router.use("/visita", visitaRoutes);
 router.use("/imobiliaria", imobiliariaRoutes);
-router.use("/usuario", usuarioRoutes);
+router.use("/usuario",  usuarioRoutes);
 router.use("/login", loginRoutes);
 router.use("/avaliacao", avaliacaoRoutes);
-router.use("/permissao", permissaoRoutes);
+router.use("/permissao",  permissaoRoutes);
 
 module.exports = router;

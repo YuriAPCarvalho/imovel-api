@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const UsuarioService = require("../services/UsuarioService");
+const { AuthMiddleware, isAdmin } = require("../middlewares/authenticateToken");
 
 router.post("/", async (req, res) => {
   const usuario = req.body;
@@ -12,14 +13,19 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
-  try {
-    const result = await UsuarioService.findUsuarios();
-    res.json(result);
-  } catch (error) {
-    res.status(500).json({ message: "Erro ao buscar usuários.", error });
+router.get(
+  "/",
+  AuthMiddleware.apply(["ADMINISTRADOR"]),
+  isAdmin,
+  async (req, res) => {
+    try {
+      const result = await UsuarioService.findUsuarios();
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ message: "Erro ao buscar usuários.", error });
+    }
   }
-});
+);
 
 router.get("/:id", async (req, res) => {
   const { id } = req.params;

@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const contratoService = require("../services/contratoService");
+const { AuthMiddleware, isAdmin } = require("../middlewares/authenticateToken");
+
 
 router.post("/", async (req, res) => {
   const contrato = req.body;
@@ -8,7 +10,7 @@ router.post("/", async (req, res) => {
   res.json(contrato);
 });
 
-router.get("/", async (req, res) => {
+router.get("/", AuthMiddleware.apply(['ADMINISTRADOR']), isAdmin, async (req, res) => {
   const contratos = await contratoService.findContratos();
   res.json(contratos);
 });

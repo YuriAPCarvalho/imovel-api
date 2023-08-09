@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const InquilinoService = require("../services/inquilinoService");
+const { AuthMiddleware, isAdmin } = require("../middlewares/authenticateToken");
+
 
 router.post("/", async (req, res) => {
   try {
@@ -13,7 +15,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/", AuthMiddleware.apply(['ADMINISTRADOR']), isAdmin, async (req, res) => {
   try {
     const result = await InquilinoService.findInquilinos();
     res.json(result);

@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const ManutencaoService = require("../services/manutencaoService");
+const { AuthMiddleware, isAdmin } = require("../middlewares/authenticateToken");
+
 
 router.post("/", async (req, res) => {
   try {
@@ -13,7 +15,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/",  AuthMiddleware.apply(['ADMINISTRADOR']), isAdmin, async (req, res) => {
   try {
     const result = await ManutencaoService.findManutencoes();
     res.json(result);
