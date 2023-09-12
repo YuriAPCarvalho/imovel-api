@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const PermissaoService = require("../services/permissaoService");
+const { AuthMiddleware, isAdmin } = require("../middlewares/authenticateToken");
 
 router.post("/", async (req, res) => {
   try {
@@ -13,7 +14,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/", AuthMiddleware.apply(['ADMINISTRADOR']), isAdmin, async (req, res) => {
   try {
     const result = await PermissaoService.findPermissoes();
     res.json(result);
@@ -54,7 +55,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id",  async (req, res) => {
   try {
     const { id } = req.params;
     const result = await PermissaoService.deletePermissao(id);

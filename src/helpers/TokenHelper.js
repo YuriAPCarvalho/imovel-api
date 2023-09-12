@@ -2,16 +2,18 @@ const jwt = require("jsonwebtoken");
 const SECRET = process.env.JWT_SECRET;
 
 function createAuthToken(data) {
-  return jwt.sign(data, SECRET, { expiresIn: "1h" });
+  return jwt.sign(data, SECRET, { expiresIn: "1d" });
 }
 
 function decodeAuthToken(token) {
-  const isValid = jwt.verify(token, SECRET);
+  const decoded = jwt.verify(token, SECRET); 
 
-  if (!isValid) {
+  if (!decoded) {
     throw new Error("Invalid Auth Token");
   }
-  return jwt.decode(token, SECRET);
+
+  return decoded; 
 }
+
 
 module.exports = { createAuthToken, decodeAuthToken };
