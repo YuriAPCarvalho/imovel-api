@@ -12,7 +12,6 @@ const usuarioRoutes = require("./src/routes/usuarioRoutes");
 const loginRoutes = require("./src/routes/loginRoutes");
 const avaliacaoRoutes = require("./src/routes/avaliacaoRoutes");
 const permissaoRoutes = require("./src/routes/permissaoRoutes");
-const { isOperator } = require("./src/middlewares/authenticateToken");
 
 router.use("/contrato", contratoRoutes);
 router.use("/imovel", imovelRoutes);

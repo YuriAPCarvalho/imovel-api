@@ -21,4 +21,22 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.post("/google", async (req, res) => {
+  const { email, token } = req.body;
+  try {
+    const usuario = await UsuarioService.autenticarUsuarioGoogle(email, token);
+    if (usuario) {
+      const token = jwt.sign({ email: usuario.email }, process.env.JWT_SECRET);
+
+      res.json({ usuario, token });
+    } else {
+      res.status(401).json({ message: "Credenciais inválidas" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Erro ao autenticar usuário.", error });
+  }
+});
+
+
 module.exports = router;
+

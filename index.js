@@ -6,8 +6,21 @@ const app = express();
 const port = process.env.PORT;
 const cors = require("cors");
 
-// Liberacao do CORS
-app.use(cors());
+
+
+app.use((req, res, next) => {
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+  next();
+});
+
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true,
+  })
+);
 
 // Importa e executa o arquivo database.js
 require("./database");
@@ -15,7 +28,6 @@ require("./database");
 // Configura o middleware body-parser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
 // Importa as rotas da aplicação
 const routes = require("./routes");
 
