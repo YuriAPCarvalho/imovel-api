@@ -33,6 +33,7 @@ router.post("/google", async (req, res) => {
       res.status(401).json({ message: "Credenciais inválidas" });
     }
   } catch (error) {
+    console.error(error)
     res.status(500).json({ message: "Erro ao autenticar usuário.", error });
   }
 });

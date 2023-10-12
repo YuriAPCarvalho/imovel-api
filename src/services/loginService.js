@@ -19,17 +19,7 @@ class UsuarioService {
     }
   }
 
-  async autenticarUsuarioGoogle(email, senha) {
-    try {
-      let usuario = await Usuario.findOne({ where: { email: email } });
-      if (!usuario) {
-        usuario = await Usuario.create({ email: email, senha: senha });
-      }
-      return usuario;
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
+
 }
 
 module.exports = new UsuarioService();
